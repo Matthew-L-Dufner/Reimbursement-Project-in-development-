@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+</head>
+
+<body>
+    <form onsumbit="return false">
+        <h1>User Login</h1>
+        <label>Email: </label>
+        <input type="email" placeholder="Email" id="email"><br>
+        <label>Password: </label>
+        <input type="password" placeholder="Password" id="userPass"><br>
+        <button type="button" onclick="auth()">Login</button>
+        <button type="button" onclick="newUser()">Create New User</button>
+    </form>
+</body>
+
+<script>
+    async function auth() {
+        //get the user info from the database
+        email = document.getElementById("email").value;
+        userPass = document.getElementById("userPass").value;
+        let url = 'http://localhost:8080/Matthew-Dufner-P1/auth?email=' + email + '&user-pass=' + userPass;
+        let response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            }
+
+        })
+        let user = await response.json();
+        //set the user info in sessionStorage
+        if (response.status == 200) {
+
+            if (user.email == null || user.email == "") {
+                alert("User not found please create a new user!")
+                location.href = "file:///C:/Users/mattd/Documents/Revature/Matthew-Dufner-P1/Matthew-Dufner-P1/UI/User/newUserForm.html"
+            } else {
+                localStorage.getItem('userId');
+                localStorage.getItem('userAdmin');
+                localStorage.setItem('userId', user.userID);
+                localStorage.setItem('userAdmin', user.userAdmin);
+                localStorage.getItem('email');
+                localStorage.setItem('email', user.email);
+            }
+        }
+        alert("Hello, " + user.firstName + " " + user.lastName + " you have been successfully logged in.");
+
+        location.href = 'file:///C:/Users/mattd/Documents/Revature/Matthew-Dufner-P1/Matthew-Dufner-P1/UI/User/UserOptions.html'
+
+    }
+
+    async function newUser() {
+        location.href = "file:///C:/Users/mattd/Documents/Revature/Matthew-Dufner-P1/Matthew-Dufner-P1/UI/User/newUserForm.html"
+    }
+</script>
+
+</html>

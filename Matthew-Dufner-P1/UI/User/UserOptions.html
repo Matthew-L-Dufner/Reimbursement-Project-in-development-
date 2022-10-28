@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Options</title>
+</head>
+
+<body>
+    <h1>User Options</h1>
+    <button type="button" onclick="updateUser()">Update Personal Info</button>
+    <button type="button" onclick="viewRequests()">View Requests</button>
+    <button type="button" onclick="newRequest()">New Request</button>
+    <button type="button" onclick="logout()">Logout</button>
+    <div id="viewUsersAdmin"></div>
+    <div id="updateUsersAdmin"></div>
+</body>
+
+<script>
+    (async function loadCode() {
+        if (localStorage.getItem("userAdmin") == "true") {
+            let darDiv = document.getElementById("viewUsersAdmin");
+            let btn = document.createElement("button");
+
+            darDiv.innerHTML += "<button type='button' id='viewRequestsAdmin' onclick='viewRequestsAdmin()'>Admin View Requests</button>";
+
+            darDiv.innerHTML += "<button type='button' id='updateUserAdmin' onclick='updateUserAdmin()'>Admin Update Users</button>";
+
+            // btn.innerHTML = "Admin View Users";
+            // btn.id = "viewUsersAdmin";
+            // btn.type = "button"
+            // btn.onclick = viewUsersAdmin();
+
+            // darDiv.appendChild(btn);
+
+            // btn1.innerHTML = "Admin Update Users";
+            // btn1.id = "updateUsersAdmin";
+            // btn1.type = "button"
+            // btn1.onclick = updateUserAdmin();
+
+            // darDiv1.appendChild(btn1);
+        }
+    })();
+
+    async function updateUser() {
+        location.href = "file:///C:/Users/mattd/Documents/Revature/Matthew-Dufner-P1/Matthew-Dufner-P1/UI/User/UpdateUser.html"
+
+    }
+
+    async function viewRequests() {
+        location.href = "file:///C:/Users/mattd/Documents/Revature/Matthew-Dufner-P1/Matthew-Dufner-P1/UI/User/ViewRequests.html"
+
+    }
+
+    async function newRequest() {
+        location.href = "file:///C:/Users/mattd/Documents/Revature/Matthew-Dufner-P1/Matthew-Dufner-P1/UI/User/NewRequest.html"
+
+    }
+    async function logout() {
+        localStorage.getItem(user).delete;
+        location.href = "file:///C:/Users/mattd/Documents/Revature/Matthew-Dufner-P1/Matthew-Dufner-P1/UI/Login/UserLogin.html"
+    }
+
+    async function updateUserAdmin() {
+        location.href = "file:///C:/Users/mattd/Documents/Revature/Matthew-Dufner-P1/Matthew-Dufner-P1/UI/Admin/EditUsersAdmin.html"
+
+    }
+
+    async function viewRequestsAdmin() {
+        location.href = "file:///C:/Users/mattd/Documents/Revature/Matthew-Dufner-P1/Matthew-Dufner-P1/UI/User/ViewRequests.html"
+
+    }
+</script>
+
+</html>

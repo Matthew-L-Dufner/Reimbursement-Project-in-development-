@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update User</title>
+</head>
+
+<body>
+    <h1>Update User</h1>
+    First Name: <input type="text" placeholder="First Name" id="firstName"><br>
+    Last Name: <input type="text" placeholder="Last Name" id="lastName"><br>
+    Email: <input type="email" placeholder="Email" id="email"><br>
+    Password: <input type="password" placeholder="Password" id="user_pass"><br>
+    <button type="button" onclick="updateUser()">Update User</button>
+</body>
+
+<script>
+    async function updateUser() {
+        
+
+        let user = {
+            firstName: document.getElementById("firstName").value,
+            lastName: document.getElementById("lastName").value,
+            userPass: document.getElementById("user_pass").value,
+            email: document.getElementById("email").value
+        }
+
+        if(user.firstName.length == 0){
+            alert("Field \"First Name\" cannot be empty");
+            throw "Field cannot be empty!"
+        }
+        if(user.lastName.length == 0){
+            alert("Field \"Last Name\" cannot be empty");
+            throw "Field cannot be empty!"
+        }
+        if(user.userPass.length == 0){
+            alert("Field \"Email\" cannot be empty");
+            throw "Field cannot be empty!"
+        }
+        if(user.email.length == 0){
+            alert("Field \"Password\" cannot be empty");
+            throw "Field cannot be empty!"
+        }
+
+        let url = "http://localhost:8080/Matthew-Dufner-P1/users";
+
+        let response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify(user)
+        });
+
+        //Pt the object we just created into local storage here then redirect to the next page.
+
+        if(response.status == 200){
+            alert("Successfully updated the user.");
+            if(localStorage.getItem == null){
+                document.getElementById("login").addEventListener("click", function(){
+                window.localStorage.setItem('userId', user.userID);
+            });
+        } else{
+            localStorage.getItem('userId');
+            localStorage.setItem('userId', user.userID);
+        }
+            location.href = "file:///C:/Users/mattd/Documents/Revature/Matthew-Dufner-P1/Matthew-Dufner-P1/UI/User/UserOptions.html"
+        } else {
+            alert("Somerthing went wrong...");
+            location.href = "file:///C:/Users/mattd/Documents/Revature/Matthew-Dufner-P1/Matthew-Dufner-P1/UI/User/UpdateUser.html"
+        }
+    }
+</script>
+
+</html>

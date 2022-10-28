@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Request</title>
+</head>
+
+<body>
+    <h1>New Request</h1>
+    <form>
+        <label> Title: </label>
+        <input type="text" placeholder="Title" id="title" required><br>
+        <label> Request Date MM/DD/YYYY: </label>
+        <input type="date" placeholder="Request Date" id="requestDate" required><br>
+        <label>Amount Requested: </label>
+        <input type="number" placeholder="Amount Requested" id="amtRequested" required><br>
+        <label>Reason for Reimbursement: </label>
+        <input type="text" placeholder="Reason for Reimbursement" id="rsnforReimburse" required><br>
+        <label>Comments: </label>
+        <textarea type="text" placeholder="Comments..." rows="6" cols="100" id="cmtReimburse"> </textarea></textarea><br>
+        <button type="button" onclick="createNewrequest()">Create Request</button>
+    </form>
+</body>
+
+<script>
+    async function createNewrequest() {
+        let request = {
+            title: document.getElementById("title").value,
+            requestDate: document.getElementById("requestDate").value,
+            amtRequested: document.getElementById("amtRequested").value,
+            rsnforReimburse: document.getElementById("rsnforReimburse").value,
+            cmtReimburse: document.getElementById("cmtReimburse").value
+        }
+
+        if (request.title.length == 0) {
+            alert("Field \"title\" cannot be empty");
+            throw "Field cannot be empty!"
+        }
+        if (request.requestDate.length == 0) {
+            alert("Field \"request date\" cannot be empty");
+            throw "Field cannot be empty!"
+        }
+        if (request.amtRequested.length == 0) {
+            alert("Field \"amount requested\" cannot be empty");
+            throw "Field cannot be empty!"
+        }
+        if (request.rsnforReimburse.length == 0) {
+            alert("Field \"reason for reimburesment\" cannot be empty");
+            throw "Field cannot be empty!"
+        }
+
+        userID = localStorage.getItem("userID");
+
+        let url = "http://localhost:8080/Matthew-Dufner-P1/requests?user-id=" + userID;
+
+        let response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify(request)
+        });
+
+        if (response.status == 200) {
+            
+            location.href = "file:///C:/Users/mattd/Documents/Revature/Matthew-Dufner-P1/Matthew-Dufner-P1/UI/User/ViewRequests.html"
+        } else {
+            alert("Somerthing went wrong...");
+            location.href = "file:///C:/Users/mattd/Documents/Revature/Matthew-Dufner-P1/Matthew-Dufner-P1/UI/User/NewRequest.html"
+        }
+    }
+</script>
+</html>

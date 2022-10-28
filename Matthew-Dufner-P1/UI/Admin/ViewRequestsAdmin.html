@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale = 1.0">
+    <title>View Requests</title>
+</head>
+<style>
+    /* set the position of dropdown */
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    /* set the size and position of button on web */
+    .button {
+        padding: 10px 30px;
+        font-size: 15px;
+        position: center;
+    }
+
+    /* provide css to background of list items */
+    #listItems {
+        display: none;
+        position: absolute;
+        background-color: white;
+        min-width: 185px;
+    }
+
+    /* provide css to list items */
+    #listItems a {
+        display: block;
+        font-size: 18px;
+        background-color: #ddd;
+        color: black;
+        text-decoration: none;
+        padding: 10px;
+    }
+</style>
+
+<body>
+    <h1>View Requests</h1>
+
+    Email: <input type="email" placeholder="Email" id="email"><br>
+    <button type="button" onclick="getRequestsForUser()">Get Requests</button>
+    <button type="button" onclick="Approve()" id="Aprv"> Approve</button>
+    <button id="Deny" onclick="Deny()" id="Deny"> Deny</button>
+    <button type = "button" onclick="userOptions()" id="Main">User Options</button>
+    <div id="dropdown" class="dropdown">
+        <div id='listItems'>
+        </div>
+    <div id = "requestList"></div>
+</body>
+
+<script>
+    async function getRequestsForUser() {
+        email = document.getElementById("email").value;
+
+        if (email.length == 0) {
+            alert("Field \"Email\" cannot be empty");
+            throw "Field cannot be empty!"
+        }
+
+        let url = 'http://localhost:8080/Matthew-Dufner-P1/emailLookup?email=' + email;
+        let response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            }
+
+        })
+        let user = await response.json();
+
+        url = 'http://localhost:8080/Matthew-Dufner-P1/allrequest?user-id=' + user.userID;
+        response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            }
+        });
+
+        var array = await response.json();
+
+        let htmlElement = document.getElementById('requestList');
+
+        const darDiv = document.getElementById("dropdown");
+        const btn = document.createElement("button");
+
+        btn.innerHTML = "Select Request";
+        btn.id = "allRequests";
+        btn.class ="dropdown"
+        btn.onclick = show_hide();
+
+        darDiv.appendChild(btn);
+        
+        // if (array != 0) {
+        //     for (let i = 0; i < array.length; i++) {
+        //         let request = array[i];
+
+        //         htmlElement.innerHTML += "<h4>Title: " + request.title + readOnly + "</h4>";
+        //         htmlElement.innerHTML += "<p>requestDate: " + request.requestDate + readOnly + "</p>";
+        //         htmlElement.innerHTML += "<p>amtRequested: " + request.amtRequested + readOnly + "</p>";
+        //         htmlElement.innerHTML += "<p>rsnforReimburse: " + request.rsnforReimburse + readOnly + "</p>";
+        //         htmlElement.innerHTML += "<p>cmtReimburse: " + request.cmtReimburse + readOnly + "</p>";
+        //         htmlElement.innerHTML += "<p>status: " + request.status + "</p><br><br>";
+        //     }
+        // } else {
+        //     alert("No pending requests for user.")
+        // }
+    }
+    // async function selectRequest(){
+
+        
+
+    //     let listItems = document.getElementById('listItems');
+
+    //     listItems.innerHTML = "<a href='#'>title</a>";
+    //     for (var i = 0; i < array.length; i++) {
+    //         let request = new array[i];
+    //         requestList.innerHTML += "<a href='#'>" + request.title + "</a>";
+    //     }
+
+    //     var newDiv = document.createElement('button')
+
+
+    //     const darDiv = document.getElementById("dropdown");
+    //     const btn = document.createElement("button");
+    //     btn.innerHTML = "Select Request";
+    //     btn.id = "allRequests";
+    //     btn.onclick = show_hide();
+
+    //     darDiv.appendChild(btn);
+    // }
+    async function show_hide() {
+        email = document.getElementById("email").value;
+
+        if (email.length == 0) {
+            alert("Field \"Email\" cannot be empty");
+            throw "Field cannot be empty!"
+        }
+
+        let url = 'http://localhost:8080/Matthew-Dufner-P1/emailLookup?email=' + email;
+        let response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            }
+
+        })
+        let user = await response.json();
+
+        url = 'http://localhost:8080/Matthew-Dufner-P1/allrequest?user-id=' + user.userID;
+        response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            }
+        });
+
+        var array = await response.json();
+
+        let htmlElement = document.getElementById("requestList");
+        
+        var click = document.getElementById('listItems');
+
+        if (click.style.display === "none") {
+            click.style.display = "block";
+        } else {
+            click.style.display = "none";
+        };
+
+        for(let i = 0; i < array.length; i++){
+            let request = array.item(i);
+            htmlElement.innerHTML = "<p href='#'> " + request.requestDate + " </p>";
+            consol.log(request.requestDate);
+        }
+        
+    }
+    async function userOptions(){
+        location.href = "file:///C:/Users/mattd/Documents/Revature/Matthew-Dufner-P1/Matthew-Dufner-P1/UI/User/UserOptions.html"
+    }
+</script>
+
+</html>

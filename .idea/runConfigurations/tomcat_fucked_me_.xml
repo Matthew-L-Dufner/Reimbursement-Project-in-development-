@@ -1,0 +1,24 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="tomcat fucked me?" type="com.poratu.idea.plugins.tomcat" factoryName="SMART_TOMCAT_FACTORY">
+    <option name="adminPort" value="8005" />
+    <option name="contextPath" value="/Matthew-Dufner-P1" />
+    <option name="docBase" value="C:\Users\mattd\Documents\Revature\Matthew-Dufner-P1\Matthew-Dufner-P1" />
+    <option name="envOptions">
+      <map />
+    </option>
+    <option name="passParentEnvironmentVariables" value="true" />
+    <option name="port" value="8080" />
+    <option name="tomcatInfo">
+      <TomcatInfo>
+        <option name="name" value="Apache Tomcat/8.5.81" />
+        <option name="number" value="0" />
+        <option name="path" value="C:\Users\mattd\Documents\Revature\Apache\apache-tomcat-8.5.81" />
+        <option name="version" value="8.5.81.0" />
+      </TomcatInfo>
+    </option>
+    <option name="vmOptions" value="" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

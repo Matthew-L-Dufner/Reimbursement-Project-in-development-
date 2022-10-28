@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update User</title>
+</head>
+
+<body>
+    <h1>Update User</h1>
+    First Name: <input type="text" placeholder="First Name" id="firstName"><br>
+    Last Name: <input type="text" placeholder="Last Name" id="lastName"><br>
+    Email: <input type="email" placeholder="Email" id="email"><br>
+    Updated First Name: <input type="text" placeholder="Updated First Name" id="uFirstName"><br>
+    Updated Last Name: <input type="text" placeholder="Updated Last Name" id="uLastName"><br>
+    Updated Email: <input type="email" placeholder="Updated Email" id="uEmail"><br>
+    Updated Password: <input type="password" placeholder="Updated Password" id="uUserPass"><br>
+    User access level:
+    <input type="radio" name="badbutton " id="userAdmin" value="true" /> Admin Access
+    <input type="radio" name="badbutton " id="userAdmin" booleanValue="false" checked /> User Access
+    <button type="button" onclick="updateUser()">Update User</button>
+    <button type="button" onclick="userOptions()">User Options</button>
+</body>
+
+<script>
+    async function updateUser() {
+
+        firstName = document.getElementById("firstName").value;
+        lastName = document.getElementById("lastName").value;
+        email = document.getElementById("email").value;
+
+        if(firstName.length == 0){
+            alert("Field \"First Name\" cannot be empty");
+            throw "Field cannot be empty!"
+        }
+        if(lastName.length == 0){
+            alert("Field \"Last Name\" cannot be empty");
+            throw "Field cannot be empty!"
+        }
+        if(email.length == 0){
+            alert("Field \"Email\" cannot be empty");
+            throw "Field cannot be empty!"
+        }
+
+        let url = 'http://localhost:8080/Matthew-Dufner-P1/update?first-name=' + firstName + '&last-name=' + lastName + '&email=' + email;
+
+        let response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            }
+        })
+
+        console.log(document.getElementById('userAdmin').value)
+
+        //set the user info in local storage for the short term persistency
+        if (response.status == 200) {
+            let user = await response.json();
+
+            localStorage.setItem('userID', user.userID);
+            localStorage.setItem('firstName', user.firstName);
+            localStorage.setItem('lastName', user.lastName);
+            localStorage.setItem('userAdmin', user.userAdmin);
+            localStorage.setItem('userPass', user.userPass);
+            localStorage.setItem('email', user.email);
+            console.log(localStorage.getItem('userID'));
+            console.log(localStorage.getItem('firstName'));
+            console.log(localStorage.getItem('lastName'));
+            console.log(localStorage.getItem('userAdmin'));
+            console.log(localStorage.getItem('userPass'));
+            console.log(localStorage.getItem('email'));
+        }
+        const user = new Object();
+        console.log(user.userID = localStorage.getItem('userID'));
+
+        user.userID = localStorage.getItem('userID');
+        if (document.getElementById('uFirstName').value == ''){
+            user.firstName = document.getElementById("firstName").value;
+        }else{
+            user.firstName = document.getElementById("uFirstName").value;
+        }
+
+        if (document.getElementById('uLastName').value == ''){
+            user.lastName = document.getElementById("lastName").value;
+        }else{
+            user.lastName = document.getElementById("uLastName").value;
+        }
+
+        if(document.getElementById('userAdmin').value == "true"){
+            user.userAdmin = true;
+        }else{
+            user.userAdmin = false;
+        }
+
+        if (document.getElementById('uUserPass').value == ''){
+            user.userPass = localStorage.getItem('userPass');
+        }else{
+            user.userPass = document.getElementById("uUserPass").value;
+        }
+
+        if (document.getElementById('uEmail').value == ''){
+            user.email = document.getElementById('email').value;
+        }else{
+            user.email = document.getElementById("uEmail").value;
+        }
+
+        console.log(user);
+        console.log("Hello, " + user.firstName + " " + user.lastName + " has been successfully loaded.");
+
+        url = 'http://localhost:8080/Matthew-Dufner-P1/users?user-id=' + user.userID;
+
+        response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify(user)
+        });
+
+        //Put the object we just created into local storage here then redirect to the next page.
+
+        if (response.status == 200) {
+            alert("Successfully updated the user.");
+
+            localStorage.getItem('userId');
+            localStorage.setItem('userId', updateUser.userId);
+            localStorage.getItem('firstName');
+            localStorage.setItem('firstName', updateUser.firstName);
+            localStorage.getItem('lastName');
+            localStorage.setItem('lastName', updateUser.lastName);
+            localStorage.getItem('userAdmin');
+            localStorage.setItem('userAdmin', updateUser.userAdmin);
+            localStorage.getItem('userPass');
+            localStorage.setItem('userPass', updateUser.userPass);
+            localStorage.getItem('email');
+            localStorage.setItem('email', updateUser.email);
+
+
+            location.href = "file:///C:/Users/mattd/Documents/Revature/Matthew-Dufner-P1/Matthew-Dufner-P1/UI/Admin/AdminOptions.html"
+        } else {
+            alert("Somerthing went wrong...");
+            location.href = "file:///C:/Users/mattd/Documents/Revature/Matthew-Dufner-P1/Matthew-Dufner-P1/UI/Admin/EditUsersAdmin.html"
+        }
+    }
+    
+    async function userOptions(){
+        location.href = "file:///C:/Users/mattd/Documents/Revature/Matthew-Dufner-P1/Matthew-Dufner-P1/UI/User/UserOptions.html"
+    }
+</script>
+
+</html>

@@ -1,0 +1,15 @@
+create table users(
+user_id serial primary key,
+first_name varchar (100),
+last_name varchar (100),
+user_pass varchar (100) not null,
+user_admin bool default 'f',
+email_address varchar (100) not null unique);
+
+create table requests(
+request_id serial primary key,
+user_id int references users(user_id),
+amount_requested decimal (1000) not null,
+reason_for_reimbursement varchar (1000) not null,
+reimbursement_comments varchar (2500),
+approve_deny bool);

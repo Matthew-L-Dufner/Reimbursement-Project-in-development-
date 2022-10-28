@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta https-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale = 1.0">
+
+    <title>View Requests</title>
+</head>
+
+<body>
+    <button type="button" onclick="userOptions()"> User Options Menu</button>
+    <form onsubmit="return false">
+        <h1>View Request</h1>
+        <label>By Request ID: </label>
+        <input type="number" placeholder="Enter Request ID" id="requestID" required><br>
+        <button type="submit" id="viewRequest" onclick="viewRequestByID(); clearSelection()">Search Request</button>
+        <button type="button" onclick="getRequestsForUser(); clearAllSelection()">View All Requests</button>
+        <button type="button" onclick="updateRequest()">Update Request</button>
+        <button type="button" onclick="clearSelection()">Clear Selection</button>
+        <button type="button" onclick="clearAllSelection()">Clear All Selections</button>
+    </form>
+    <br>
+    <h1 id="viewRequestHeader"></h1>
+    <table style="width: 90%" id="RequestByID"></table><br><br>
+    <h1 id="requestsHeader"></h1>
+    <table style="width: 90%" id="requests"></table>
+    <div id="AdminMenu"></div>
+</body>
+<script>
+    (async function adminMenu(){
+        if (localStorage.getItem("userAdmin") == "true") {
+            let darDiv = document.getElementById("AdminMenu");
+            let btn = document.createElement("button");
+
+            darDiv.innerHTML += "<button type='button' id='Approve' onclick='Approve(), clearSelection(), viewRequestByID()'>Approve</button>";
+            darDiv.innerHTML += "<button type='button' id='Deny' onclick='Deny(), clearSelection(), viewRequestByID()'>Deny</button>";
+        }
+    })();
+    async function getRequestsForUser() {
+        let userID = localStorage.getItem("userID");
+        let url = 'http://localhost:8080/Matthew-Dufner-P1/allrequest?user-id=' + userID;
+        let response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+            }
+        });
+
+        let array = await response.json();
+        let htmlElement = document.getElementById("requests");
+        htmlElement.style.border = "2px solid white";
+        htmlElement.style.background = "#e200f2"
+
+        htmlElement.innerHTML = "<tr><th style='width: 5%; border: 1px solid black'>User ID: </th>" +
+            "<th style='width: 5%; border: 1px solid black'>Request ID: </th>" +
+            "<th style='border: 2px solid black'>Title:</th>" +
+            "<th style='width: 10%; border: 1px solid black'>Requested Date</th>" +
+            "<th style='width: 10%; border: 1px solid black'>Amount Requested</th>" +
+            "<th style='width: 10%; border: 1px solid black'>Reason for Reimbursement</th></tr>" +
+            "<th style='border: 1px solid black'>Comments</th></tr>" +
+            "<th style='width: 10%; border: 3px solid black'>Status</th></tr>";
+        
+        console.log(array);
+
+        for (let i = 0; i < array.length; i++) {
+            let request = array[i];
+            htmlElement.innerHTML += "<tr><td style='width: 5%; border: 1px solid black'>" + userID +
+                "</td><td style='width: 5%; border: 1px solid black'>" + request.requestID +
+                "</td><td style='border: 2px solid black'>" + request.title +
+                "</td><td style='width: 10%; border: 1px solid black'>" + request.requestDate +
+                "</td><td style='width: 10%; border: 1px solid black'>" + request.amtRequested +
+                "</td><td style='width: 10%; border: 1px solid black'>" + request.rsnforReimburse +
+                "</td><td style='border: 1px solid black'>" + request.cmtReimburse +
+                "</td><td style='width: 10%; border: 3px solid black'>" + request.status +
+                "</td></tr>";
+        }
+    }
+
+    async function viewRequestByID() {
+        let requestID = document.getElementById("requestID").value;
+
+        let url = 'http://localhost:8080/Matthew-Dufner-P1/requests?request-id=' + requestID;
+
+        let response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            }
+
+        });
+
+        let request = await response.json();
+        let htmlElement = document.getElementById('RequestByID');
+        let titleHeader = document.getElementById('viewRequestHeader');
+
+        localStorage.getItem("requestID");
+        localStorage.setItem("requestID", request.requestID);
+        
+        titleHeader.style.textAlign = 'center';
+        titleHeader.innerHTML= "Request from RID"
+        
+        htmlElement.style.border = "2px solid white";
+        htmlElement.style.background = "#e200f2";
+        
+        console.log(request.title);
+
+        
+
+        htmlElement.innerHTML = "<tr><th style='width: 5%; border: 1px solid black'>User ID: </th>" +
+            "<th style='width: 5%; border: 1px solid black'>Request ID: </th>" +
+            "<th style='border: 2px solid black'>Title:</th>" +
+            "<th style='width: 10%; border: 1px solid black'>Requested Date</th>" +
+            "<th style='width: 10%; border: 1px solid black'>Amount Requested</th>" +
+            "<th style='width: 10%; border: 1px solid black'>Reason for Reimbursement</th></tr>" +
+            "<th style='border: 1px solid black'>Comments</th></tr>" +
+            "<th style='width: 10%; border: 3px solid black'>Status</th></tr>"
+
+        if(request.title == null){
+            alert("Request does not exist!");
+            
+        }else{
+            htmlElement.innerHTML += "<tr><td style='width: 5%; border: 1px solid black'>" + request.requestFK +
+                "</td><td style='width: 5%; border: 1px solid black'>" + request.requestID +
+                "</td><td style='border: 2px solid black'>" + request.title +
+                "</td><td style='width: 10%; border: 1px solid black'>" + request.requestDate +
+                "</td><td style='width: 10%; border: 1px solid black'>" + request.amtRequested +
+                "</td><td style='width: 10%; border: 1px solid black'>" + request.rsnforReimburse +
+                "</td><td style='border: 1px solid black'>" + request.cmtReimburse +
+                "</td><td style='width: 10%; border: 3px solid black'>" + request.status +
+                "</td></tr>"
+        }
+        
+        
+
+
+        console.log(request);
+    }
+
+    async function clearAllSelection() {
+        let list = document.getElementById("requests");
+        list.style.border = "none";
+        list.innerHTML = "";
+    }
+
+    async function clearSelection() {
+        let request = document.getElementById("RequestByID");
+        request.style.border = "none";
+        request.innerHTML = "";
+    }
+
+    async function Approve(){
+        let requestID = localStorage.getItem("requestID").value;
+
+        let url = 'http://localhost:8080/Matthew-Dufner-P1/requests?request-id=' + requestID;
+
+        let response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            }
+        });
+
+        let array = await response.json();
+
+        let request ={
+            requestFk: array.requestFK,
+            requestID: array.requestID,
+            title: array.title,
+            requestDate: array.requestDate,
+            amtRequested: array.amtRequested,
+            rsnforReimburse: array.rsnforReimburse,
+            cmtReimburse: array.cmtReimburse,
+            status: "Approved"
+        } 
+        
+        console.log(request);
+
+        url = 'http://localhost:8080/Matthew-Dufner-P1/requests?request-id=' + requestID;
+
+        response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(request)
+        });
+    }
+    async function Deny(){
+        let requestID = document.getElementById('requestID').value;
+
+        let url = 'http://localhost:8080/Matthew-Dufner-P1/requests?request-id=' + requestID;
+
+        let response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            }
+        });
+
+        let array = await response.json();
+
+        let request ={
+            requestFk: array.requestFK,
+            requestID: array.requestID,
+            title: array.title,
+            requestDate: array.requestDate,
+            amtRequested: array.amtRequested,
+            rsnforReimburse: array.rsnforReimburse,
+            cmtReimburse: array.cmtReimburse,
+            status: "Denied"
+        } 
+        
+        url = 'http://localhost:8080/Matthew-Dufner-P1/requests?request-id=' + requestID;
+
+        response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(request)
+        });
+    }
+    async function updateRequest() {
+        location.href = "file:///C:/Users/mattd/Documents/Revature/Matthew-Dufner-P1/Matthew-Dufner-P1/UI/User/UpdateRequest.html";
+    }
+
+    async function userOptions() {
+        location.href = "file:///C:/Users/mattd/Documents/Revature/Matthew-Dufner-P1/Matthew-Dufner-P1/UI/User/UserOptions.html";
+    }
+</script>
+</html>
